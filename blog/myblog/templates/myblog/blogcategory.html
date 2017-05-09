@@ -1,0 +1,278 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="shortcut icon" href='/static/myblog/images/Nblue.ico'>
+	<link rel="stylesheet" type="text/css" href="{% static 'myblog/css/fonts/css/font-awesome.min.css' %}">
+	<script type="text/javascript" src="{% static 'myblog/js/jquery-3.2.0.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'myblog/js/css.js' %}"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'myblog/css/style.css' %}">
+	<link rel='stylesheet' id='metaslider-nivo-slider-css'  href='{% static "myblog/css/nivo-slider.css" %}' type='text/css' media='all' property='stylesheet' />
+    <link rel='stylesheet' id='metaslider-public-css'  href='{% static "myblog/css/public.css" %}' type='text/css' media='all' property='stylesheet' />
+    <link rel='stylesheet' id='metaslider-nivo-slider-bar-css'  href='{% static "myblog/css/bar.css" %}' type='text/css' media='all' property='stylesheet' />
+    <script type='text/javascript' src='{% static "myblog/js/jquery.nivo.slider.pack.js" %}'></script>
+	<title>NiceSpace-小鹏的个人博客</title>
+</head>
+<body class="home">
+<div class="continer">
+<header id="idheader" class="classheader">
+	<div class="header-continer">
+		<div class="headbg"></div>
+		<div id="color-bars">
+			<li id="color-1"></li>
+			<li id="color-2"></li>
+			<li id="color-3"></li>
+			<li id="color-4"></li>
+			<li id="color-5"></li>
+			<li id="color-6"></li>
+		</div>
+		<hgroup class="logo-site">
+			<h1 class="site-title">
+			<a href="/"><img src="{% static 'myblog/images/logo.png' %}" alt="NiceSpace" /></a>
+			</h1>
+		</hgroup>
+		<div class="nav-continer">
+			<ul id="main-menu" class="nav-menu main-menu">
+				<li id="menu-item-1" class="menu-item menu-item-1"><a href="/">首页</a></li>
+				<li id="menu-item-2" class="menu-item menu-has-children menu-item-2">
+					<a href="#">生活集</a>
+					<ul id="sub-menu-item2" class="sub-menu">
+						<li id="menu-item-21" class="sub-menu-item menu-item-21"><a href="/type/生活笔记">生活笔记</a></li>
+						<li id="menu-item-22" class="sub-menu-item menu-item-22"><a href="/type/他山之石">他山之石</a></li>
+						<li id="menu-item-23" class="sub-menu-item menu-item-23"><a href="#">点滴瞬间</a></li>
+					</ul>
+				</li>
+				<li id="menu-item-3" class="menu-item  menu-has-children menu-item-3">
+					<a href="#">学习笔记</a>
+					<ul id="sub-menu-item3" class="sub-menu">
+						<li id="menu-item-31" class="sub-menu-item menu-item-31"><a href="/type/Lua">LUA</a></li>
+						<li id="menu-item-32" class="sub-menu-item menu-item-32"><a href="/type/Python">Python</a></li>
+						<li id="menu-item-33" class="sub-menu-item menu-item-33"><a href="/type/Web">Web</a></li>
+					</ul>
+				</li>
+				<li id="menu-item-4" class="menu-item menu-item-4"><a href="/about">关于我</a></li>
+				<li id="menu-item-5" class="menu-item menu-item-5"><a href="/leavemessage">留言</a></li>
+			</ul>
+		</div>
+		<div class="clear"></div>
+	</div>
+</header>
+<div class="welcome">
+	<strong>
+		<i class="fa fa-volume-up">&nbsp;欢迎来到NiceSpace！祝大家开心每一天！</i>
+	</strong>
+</div>
+<section class="content">
+	<div class="middle">
+		<div class="content-main">
+		{% for blog in bloglist %}
+			<div class="article-new content-child">
+				<div class="content-box">
+					<div class="article-type">{{ blog.blogtype.name }}</div>
+					<div class="article-img">
+						<a href="/articles/{{ blog.id }}">
+							<img src="{{ blog.img_path }}" alt="{{ blog.name }}">
+						</a>
+					</div>
+					<div class="article-content">
+						<h2><a href="/articles/{{ blog.id }}">{{ blog.name }}</a></h2>
+						<div class="content-text">
+							{{ blog.summary }}
+						</div>
+						<div class="article-info default-info">
+							<span class="post-type">
+								<i class="fa fa-server"></i>
+								{{ blog.is_original }}
+							</span>
+							<span class="post-time">
+								<i class="fa fa-clock-o"></i>
+								{{ blog.pub_date }}
+							</span>
+							<span class="post-view">
+								<i class="fa fa-eye"></i>
+								{{ blog.eyes_count }}
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+		<div class="page-nav">
+			{% for page in pages %}
+				{% if forloop.counter == curpage %}
+					<span class="page-nums current-page">{{page.name}}</span>
+				{% else %}
+					<a class="page-nums" href="{{ page.path }}">{{page.name}}</a>
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+	<div class="side">
+		<div class="side-part side-widget">
+			<h5 class="side-title">随机文章</h5>
+			<div class="metaslider">
+    			<div id="metaslider_container">
+        			<div class='slider-wrapper theme-bar' style="border: 0px solid #fff">
+          				<div id='metaslider' class='nivoSlider'>
+                			{% for blog in randomblogs %}
+                				{% if forloop.counter <= MAX_SIDE_DISPLAY %}
+									<a href="/articles/{{ blog.id }}" target="_self"><img src="{{ blog.img_path }}" data-title="{{ blog.name }}" title="{{ blog.name }}" alt="{{ blog.name }}"/></a>
+								{% endif %}
+							{% endfor %}
+           				 </div>
+        			</div>
+        		</div>
+    			<script type="text/javascript">
+       				var metaslider = function($) {
+           			$('#metaslider').nivoSlider({ 
+            		   boxCols:7,
+						boxRows:5,
+						pauseTime:3000,
+						effect:"random",
+						controlNav:false,
+						directionNav:true,
+						pauseOnHover:true,
+						animSpeed:600,
+						prevText:"&lt;",
+						nextText:"&gt;",
+						slices:10,
+						manualAdvance:false
+					});
+					};
+					var timer_slider = function() {
+          			var slider = !window.jQuery ? window.setTimeout(timer_slider, 100) : !jQuery.isReady ? window.setTimeout(timer_slider, 1) : metaslider(window.jQuery);
+       				};
+        			timer_slider();
+    			</script>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="side-part side-widget">
+			<h5 class="side-title">推荐文章</h5>
+			<div class="side-child">
+				<ul>
+					{% for blog in recommendblogs %}
+						{% if forloop.counter <= MAX_SIDE_DISPLAY %}
+							<li>
+								<div class="side-child-img">
+									<a href="/articles/{{ blog.id }}">
+										<img src="{{ blog.img_path }}" alt="{{ blog.name }}">
+									</a>
+								</div>
+								<div class="side-child-title">
+									<a href="/articles/{{ blog.id }}">{{ blog.name }}</a>
+								</div>
+								<div class="side-child-info default-info">
+									<span class="post-type">
+										<i class="fa fa-server"></i>
+											{{ blog.is_original }}
+									</span>
+									<span class="post-time">
+										<i class="fa fa-clock-o"></i>
+											{{ blog.pub_date }}
+									</span>
+								</div>
+							</li>
+						{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="side-part side-widget">
+			<h5 class="side-title">转载文章</h5>
+			<div class="side-child">
+				<ul>
+					{% for blog in notoriginalblogs %}
+						{% if forloop.counter <= MAX_SIDE_DISPLAY %}
+							<li>
+								<div class="side-child-img">
+									<a href="/articles/{{ blog.id }}">
+										<img src="{{ blog.img_path }}" alt="{{ blog.name }}">
+									</a>
+								</div>
+								<div class="side-child-title">
+									<a href="/articles/{{ blog.id }}">{{ blog.name }}</a>
+								</div>
+								<div class="side-child-info default-info">
+									<span class="post-type">
+										<i class="fa fa-server"></i>
+											{{ blog.is_original }}
+									</span>
+									<span class="post-time">
+										<i class="fa fa-clock-o"></i>
+											{{ blog.pub_date }}
+									</span>
+								</div>
+							</li>
+						{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="side-part side-widget">
+			<h5 class="side-title">标签导航</h5>
+			<ul class="mark-nav">
+				{% for mask in blogmask %}
+					<li>
+						<a href="/mask/{{mask.name}}">{{mask.name}}({{mask.count}})</a>
+					</li>
+				{% endfor %}
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<div class="side-part side-widget">
+			<h5 class="side-title">文章归档</h5>
+			<ul class="article-collect">
+				{% for date in blogdate %}
+					<li>
+						<a href="/{{date.year}}/{{date.month}}">{{date.year}}年{{date.month}}月</a>
+					</li>
+				{% endfor %}
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<div class="side-part side-widget">
+			<h5 class="side-title">友情链接</h5>
+			<ul class="friend-link">
+				<li>
+					<a target="_blank" href="http://zgboke.com/">中国博客联盟</a>
+				</li>
+				<li>
+					<a target="_blank" href="https://www.chrafz.com/">张弦先生</a>
+				</li>
+				<li>
+					<a target="_blank" href="http://www.suxing.me/">苏醒博客</a>
+				</li>
+				<li>
+					<a target="_blank" href="http://cuiqingcai.com/">静觅</a>
+				</li>
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<div class="tooltip"></div>
+	</div>
+</section>
+<footer class="tail">
+	<h5>NiceSpace|Copyright © 2017</h5> 
+</footer>
+</div>
+
+
+<script type="text/javascript" src="{% static 'myblog/js/flowup.js' %}"></script>
+<script>
+$(function(){
+	$("body").flowUp("div.side-widget", { transalteY: 350, duration: 1 });
+	$("body").flowUp("div.content-child", { transalteY: 350, duration: 1 });
+});
+</script>
+
+<!-- <script type="text/javascript">var anbgColor = "#F7FAFC", anbgSpeed = "10", anbgPnum = 45;</script>
+<script type="text/javascript" src="{% static 'myblog/js/animatebg.js' %}"></script> -->
+</body>
+</html>
